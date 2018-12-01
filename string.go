@@ -27,19 +27,3 @@ func (s String) NotTo(f func(string) bool, formatAndArgs ...interface{}) bool {
 	s.x.not = true
 	return s.To(f, formatAndArgs...)
 }
-
-func (s String) ToEq(expected string) bool {
-	s.x.tb.Helper()
-	return s.To(stringEq(expected), "got %q, want %q", s.s, expected)
-}
-
-func (s String) NotToEq(expected string) bool {
-	s.x.tb.Helper()
-	return s.NotTo(stringEq(expected), "got %q, did not want %q", s.s, expected)
-}
-
-func stringEq(expected string) func(actual string) bool {
-	return func(actual string) bool {
-		return actual == expected
-	}
-}
