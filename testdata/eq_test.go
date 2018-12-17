@@ -8,7 +8,7 @@ import (
 )
 
 func TestWantEq(t *testing.T) {
-	want.Eq(t, math.Abs(-1), 1.0)
+	want.Eq(t, math.Abs(-1), 1)
 	want.Eq(t, math.Abs(-1), 1.0)
 	want.Eq(t, math.Abs(-1), 2)
 }
