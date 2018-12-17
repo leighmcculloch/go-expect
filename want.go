@@ -106,6 +106,20 @@ func NotNil(tb testing.TB, got interface{}) bool {
 	return def.NotNil(tb, got)
 }
 
+// True checks if got is true and reports an error to tb if it is not true.
+// Returns true if true.
+func True(tb testing.TB, got bool) bool {
+	tb.Helper()
+	return def.True(tb, got)
+}
+
+// False checks if got is false and reports an error to tb if it is not false.
+// Returns true if false.
+func False(tb testing.TB, got bool) bool {
+	tb.Helper()
+	return def.False(tb, got)
+}
+
 // A Want is a set of options for configuring the behavior of the library. Its
 // zero value (Want{}) is usable and is equivalent to invoking the package
 // functions Eq and NotEq.
@@ -174,6 +188,32 @@ func (w *Want) NotNil(tb testing.TB, got interface{}) bool {
 		tb.Errorf("%s: got %+v, want not <nil>", w.caller(), got)
 	}
 	return notNil
+}
+
+// True checks if got is true and reports an error to tb if it is not true.
+// Returns true if true.
+func (w *Want) True(tb testing.TB, got bool) bool {
+	tb.Helper()
+	isTrue := got
+	if isTrue {
+		tb.Logf("%s: got %+v", w.caller(), got)
+	} else {
+		tb.Errorf("%s: got %+v, want true", w.caller(), got)
+	}
+	return isTrue
+}
+
+// False checks if got is false and reports an error to tb if it is not false.
+// Returns true if false.
+func (w *Want) False(tb testing.TB, got bool) bool {
+	tb.Helper()
+	isFalse := !got
+	if isFalse {
+		tb.Logf("%s: got %+v", w.caller(), got)
+	} else {
+		tb.Errorf("%s: got %+v, want false", w.caller(), got)
+	}
+	return isFalse
 }
 
 func (w *Want) caller() string {
