@@ -33,9 +33,10 @@ func TestEq(t *testing.T) {
 		ft := &fakeT{}
 		want := want.Want{DiffEnabled: true}
 		want.Eq(ft, "b", "a")
-		wantErr := `want.Eq(ft, "b", "a"): {string}:
-	-: "b"
-	+: "a"
+		wantErr := `want.Eq(ft, "b", "a"):   string(
+- 	"b",
++ 	"a",
+  )
 `
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
