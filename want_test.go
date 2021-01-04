@@ -18,10 +18,10 @@ func TestEq(t *testing.T) {
 			t.Errorf("got %v, want true", b)
 		}
 	})
-	t.Run("fail", func(t *testing.T) {
+	t.Run("fail without diff", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.Eq(ft, "b", "a")
-		wantErr := `b := want.Eq(ft, "b", "a"): got b, want a`
+		b := want.Eq(ft, 0, 1)
+		wantErr := `b := want.Eq(ft, 0, 1): got 0, want 1`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
@@ -29,17 +29,49 @@ func TestEq(t *testing.T) {
 			t.Errorf("got %v, want false", b)
 		}
 	})
-	t.Run("fail with diff", func(t *testing.T) {
+	t.Run("fail with string diff when comparing strings", func(t *testing.T) {
 		ft := &fakeT{}
-		want := want.Want{DiffEnabled: true}
-		want.Eq(ft, "b", "a")
-		wantErr := `want.Eq(ft, "b", "a"):   string(
-- 	"b",
-+ 	"a",
-  )
+		b := want.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng")
+		wantErr := `b := want.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng"):
+--- Want
++++ Got
+@@ -1,5 +1,5 @@
+ a
+-z
++b
+ c
+ d
+ e
+`
+		want.Eq(t, ft.ErrorCalls[0], wantErr)
+		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
+			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
+		}
+		if b {
+			t.Errorf("got %v, want false", b)
+		}
+	})
+	t.Run("fail with dump diff when comparing structs", func(t *testing.T) {
+		ft := &fakeT{}
+		type value struct {
+			Name string
+		}
+		b := want.Eq(ft, value{"A"}, value{"B"})
+		wantErr := `b := want.Eq(ft, value{"A"}, value{"B"}):
+--- Want
++++ Got
+@@ -1,4 +1,4 @@
+ (want_test.value) {
+- Name: (string) (len=1) "B"
++ Name: (string) (len=1) "A"
+ }
+ 
 `
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
+		}
+		if b {
+			t.Errorf("got %v, want false", b)
 		}
 	})
 }

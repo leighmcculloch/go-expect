@@ -1,153 +1,96 @@
-// Package want is a package that provides equality functions for testing Go
-// code. It contains only this one function and is intended to be succinct and
-// focused on making the most common action in test code simple, testing
-// equality expectations.
-//
-// A simple test function looks like this:
-//
-//     func TestAbs(t *testing.T) {
-//         want.Eq(t, Abs(-1), 1)
-//     }
-//
-// If the check passes, the verbose output looks like this:
-//
-//     --- PASS: TestAbs (0.00s)
-//         test.go:2: want.Eq(t, Abs(-1), 1): got 1
-//
-// If the check fails, the output looks like this:
-//
-//     --- FAIL: TestAbs (0.00s)
-//         test.go:2: want.Eq(t, Abs(-1), 1): got 0, want 1
-//
-// Got and want
-//
-// The terms got and want are used to describe what you got as a result of
-// running the code, and what you want to have gotten. These terms are commonly
-// found in the Go stdlib and it's own testing docs. In some other testing
-// libraries they are sometimes referred to actual and expected.
-//
-// Nesting
-//
-// Checks can be nested using the bool return value of a prior check.
-//
-//     func TestAbs(t *testing.T) {
-//         if want.Eq(t, Abs(-1), 1) {
-//             ...
-//         }
-//     }
-//
-// Breaking early
-//
-// Checks can cause a test to stop at a failure using the bool return value.
-//
-//     func TestAbs(t *testing.T) {
-//         if !want.Eq(t, Abs(-1), 1) {
-//             return
-//         }
-//         ...
-//     }
-//
-// Comparison
-//
-// Comparison of got and want is done using Google's cmp Go module:
-// https://github.com/google/go-cmp/cmp
-//
-// Diffs
-//
-// Diffs can be enabled in error output of Eq comparisons. To enable diffs
-// instantiate Want with DiffEnabled true and use its functions instead of the
-// package functions.
-//
-// If the check fails, the output looks like this:
-//
-//     --- FAIL: TestAbs (0.00s)
-//         test.go:2: want.Eq(t, Abs(-1), 1): {int}:
-//                -: 0
-//                +: 1
-//
 package want
 
 import (
 	"io/ioutil"
+	"reflect"
 	"runtime"
 	"strings"
 	"testing"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/google/go-cmp/cmp"
+	"github.com/pmezard/go-difflib/difflib"
 )
-
-var def = Want{}
-
-// Eq compares got to want and reports an error to tb if they are not equal.
-// Returns true if equal.
-func Eq(tb testing.TB, got, want interface{}) bool {
-	tb.Helper()
-	return def.Eq(tb, got, want)
-}
-
-// NotEq compares got to want and reports an error to tb if they are equal.
-// Returns true if not equal.
-func NotEq(tb testing.TB, got, notWant interface{}) bool {
-	tb.Helper()
-	return def.NotEq(tb, got, notWant)
-}
-
-// Nil checks if got is nil and reports an error to tb if it is not nil.
-// Returns true if nil.
-func Nil(tb testing.TB, got interface{}) bool {
-	tb.Helper()
-	return def.Nil(tb, got)
-}
-
-// NotNil checks if got is not nil and reports an error to tb if it is nil.
-// Returns true if not nil.
-func NotNil(tb testing.TB, got interface{}) bool {
-	tb.Helper()
-	return def.NotNil(tb, got)
-}
-
-// True checks if got is true and reports an error to tb if it is not true.
-// Returns true if true.
-func True(tb testing.TB, got bool) bool {
-	tb.Helper()
-	return def.True(tb, got)
-}
-
-// False checks if got is false and reports an error to tb if it is not false.
-// Returns true if false.
-func False(tb testing.TB, got bool) bool {
-	tb.Helper()
-	return def.False(tb, got)
-}
 
 // A Want is a set of options for configuring the behavior of the library. Its
 // zero value (Want{}) is usable and is equivalent to invoking the package
 // functions Eq and NotEq.
-type Want struct {
-	// DiffEnabled when true enables comparison diffs in error reports.
-	DiffEnabled bool
+type Want struct{}
+
+// displayStringDiff returns if a diff should be displayed as a simple comparison
+// of two strings when comparing the value.
+func displayStringDiff(v interface{}) bool {
+	t := reflect.TypeOf(v)
+	switch t.Kind() {
+	case reflect.String:
+		return true
+	}
+	return false
+}
+
+// displayDumpDiff returns if a diff should be displayed as a spew dump when
+// comparing the value.
+func displayDumpDiff(v interface{}) bool {
+	t := reflect.TypeOf(v)
+	switch t.Kind() {
+	case reflect.Bool,
+		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr,
+		reflect.Float32, reflect.Float64,
+		reflect.Complex64, reflect.Complex128:
+		return false
+	}
+	return true
 }
 
 // Eq compares got to want and reports an error to tb if they are not equal.
 // Returns true if equal.
 func (w *Want) Eq(tb testing.TB, got, want interface{}) bool {
 	tb.Helper()
-	if w.DiffEnabled {
-		d := cmp.Diff(got, want)
-		eq := d == ""
-		if eq {
-			tb.Logf("%s: got %+v", w.caller(), got)
-		} else {
-			tb.Error(w.caller()+":", d)
-		}
-		return eq
-	}
+
 	eq := cmp.Equal(got, want)
 	if eq {
 		tb.Logf("%s: got %+v", w.caller(), got)
-	} else {
-		tb.Errorf("%s: got %+v, want %+v", w.caller(), got, want)
+		return eq
 	}
+
+	if displayStringDiff(got) || displayStringDiff(want) {
+		diff := difflib.UnifiedDiff{
+			A:        difflib.SplitLines(want.(string)),
+			B:        difflib.SplitLines(got.(string)),
+			FromFile: "Want",
+			ToFile:   "Got",
+			Context:  3,
+		}
+		text, _ := difflib.GetUnifiedDiffString(diff)
+		tb.Errorf("%s:\n%s", w.caller(), text)
+		return eq
+	}
+
+	if displayDumpDiff(got) || displayDumpDiff(want) {
+		spew := spew.ConfigState{
+			Indent:                  " ",
+			DisableMethods:          true,
+			DisablePointerAddresses: true,
+			DisableCapacities:       true,
+			SortKeys:                true,
+			SpewKeys:                true,
+		}
+		gotS := spew.Sdump(got)
+		wantS := spew.Sdump(want)
+		diff := difflib.UnifiedDiff{
+			A:        difflib.SplitLines(wantS),
+			B:        difflib.SplitLines(gotS),
+			FromFile: "Want",
+			ToFile:   "Got",
+			Context:  3,
+		}
+		text, _ := difflib.GetUnifiedDiffString(diff)
+		tb.Errorf("%s:\n%s", w.caller(), text)
+		return eq
+	}
+
+	tb.Errorf("%s: got %+v, want %+v", w.caller(), got, want)
 	return eq
 }
 
