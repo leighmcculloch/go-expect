@@ -126,7 +126,7 @@ func (w *Want) NotNil(tb testing.TB, got interface{}) bool {
 	tb.Helper()
 	notNil := got != nil
 	if notNil {
-		tb.Logf("%s: got %+v", w.caller(), got)
+		tb.Logf("%s: got %+v, not <nil>", w.caller(), got)
 	} else {
 		tb.Errorf("%s: got %+v, want not <nil>", w.caller(), got)
 	}
