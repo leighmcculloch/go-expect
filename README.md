@@ -1,5 +1,7 @@
 # go-want
 
+[![Go Reference](https://pkg.go.dev/badge/4d63.com/want.svg)](https://pkg.go.dev/4d63.com/want)
+
 Go test library that delivers simple test assertions with useful verbose output.
 
 ## Usage
