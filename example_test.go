@@ -1,5 +1,3 @@
-// +build !readme_example
-
 package want_test
 
 import (
