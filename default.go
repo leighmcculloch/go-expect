@@ -45,3 +45,11 @@ func False(tb testing.TB, got bool) bool {
 	tb.Helper()
 	return def.False(tb, got)
 }
+
+// EqJSON compares got to want and reports an error to tb if they are not equal.
+// JSON is first formatted consistently and keys are sorted before comparing.
+// Returns true if logically equal.
+func EqJSON(tb testing.TB, got, want []byte) bool {
+	tb.Helper()
+	return def.EqJSON(tb, got, want)
+}

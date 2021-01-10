@@ -43,7 +43,6 @@ func TestEq(t *testing.T) {
  d
  e
 `
-		want.Eq(t, ft.ErrorCalls[0], wantErr)
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}

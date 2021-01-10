@@ -14,7 +14,7 @@ import (
 
 // A Want is a set of options for configuring the behavior of the library. Its
 // zero value (Want{}) is usable and is equivalent to invoking the package
-// functions Eq and NotEq.
+// functions.
 type Want struct{}
 
 // displayStringDiff returns if a diff should be displayed as a simple comparison

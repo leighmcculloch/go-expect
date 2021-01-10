@@ -6,4 +6,5 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/google/go-cmp v0.5.4
 	github.com/pmezard/go-difflib v1.0.0
+	github.com/tidwall/pretty v1.0.2 // indirect
 )
