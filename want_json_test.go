@@ -4,7 +4,31 @@ import (
 	"testing"
 
 	"4d63.com/want"
+	"github.com/tidwall/pretty"
 )
+
+func TestEqJSON_PRETTY(t *testing.T) {
+	opt := pretty.Options{
+		Indent:   "  ",
+		SortKeys: true,
+	}
+
+	{
+		in := `{"key":"value","key":"value2","key3":3}`
+		out := pretty.PrettyOptions([]byte(in), &opt)
+		t.Log(string(out))
+	}
+
+	{
+		in := ` {
+				"key":"value2",
+				"key":"value",
+				"key3": 3
+			}`
+		out := pretty.PrettyOptions([]byte(in), &opt)
+		t.Log(string(out))
+	}
+}
 
 func TestEqJSON(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
