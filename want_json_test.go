@@ -4,31 +4,7 @@ import (
 	"testing"
 
 	"4d63.com/want"
-	"github.com/tidwall/pretty"
 )
-
-func TestEqJSON_PRETTY(t *testing.T) {
-	opt := pretty.Options{
-		Indent:   "  ",
-		SortKeys: true,
-	}
-
-	{
-		in := `{"key":"value","key":"value2","key3":3}`
-		out := pretty.PrettyOptions([]byte(in), &opt)
-		t.Log(string(out))
-	}
-
-	{
-		in := ` {
-				"key":"value2",
-				"key":"value",
-				"key3": 3
-			}`
-		out := pretty.PrettyOptions([]byte(in), &opt)
-		t.Log(string(out))
-	}
-}
 
 func TestEqJSON(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
@@ -36,9 +12,8 @@ func TestEqJSON(t *testing.T) {
 		// TODO: pretty seems to not be consistently sorting keys, prove that and open an issue
 		b := want.EqJSON(
 			ft,
-			[]byte(`{"key":"value","key":"value2","key3":3}`),
+			[]byte(`{"key":"value","key3":3}`),
 			[]byte(` {
-				"key":"value2",
 				"key":"value"
 				"key3": 3,
 			}`),
@@ -54,10 +29,9 @@ func TestEqJSON(t *testing.T) {
 		ft := &fakeT{}
 		b := want.EqJSON(
 			ft,
-			[]byte(`{"key":"v alue","key":"value2","key3":3}`),
+			[]byte(`{"key":"v alue","key3":3}`),
 			[]byte(` {
 				"key":"value",
-				"key":"value2",
 				"key3": 3
 			}`),
 		)
@@ -68,9 +42,9 @@ func TestEqJSON(t *testing.T) {
  {
 -  "key": "value",
 +  "key": "v alue",
-   "key": "value2",
    "key3": 3
  }
+ 
 `
 		want.Eq(t, ft.ErrorCalls[0], wantErr)
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
