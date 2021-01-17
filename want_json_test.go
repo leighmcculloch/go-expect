@@ -9,7 +9,6 @@ import (
 func TestEqJSON(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		// TODO: pretty seems to not be consistently sorting keys, prove that and open an issue
 		b := want.EqJSON(
 			ft,
 			[]byte(`{"key":"value","key3":3}`),
@@ -46,7 +45,6 @@ func TestEqJSON(t *testing.T) {
  }
  
 `
-		want.Eq(t, ft.ErrorCalls[0], wantErr)
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
