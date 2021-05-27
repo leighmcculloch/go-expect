@@ -155,17 +155,24 @@ func False(tb testing.TB, got bool) bool {
 }
 
 func caller() string {
-	skip := 4
-	callers := [10]uintptr{}
+	const maxCallDepth = 10
+	callers := [maxCallDepth]uintptr{}
 	count := runtime.Callers(0, callers[:])
 	frames := runtime.CallersFrames(callers[:count])
 	frame := (*runtime.Frame)(nil)
-	for i := 0; i < skip; i++ {
+	for {
 		nextFrame, more := frames.Next()
 		if !more {
 			return "_"
 		}
+		if strings.HasPrefix(nextFrame.Function, "runtime.") {
+			continue
+		}
+		if strings.HasPrefix(nextFrame.Function, "4d63.com/want.") {
+			continue
+		}
 		frame = &nextFrame
+		break
 	}
 	fileBytes, err := ioutil.ReadFile(frame.File)
 	if err != nil {
