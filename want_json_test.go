@@ -11,10 +11,11 @@ func TestEqJSON(t *testing.T) {
 		ft := &fakeT{}
 		b := want.EqJSON(
 			ft,
-			[]byte(`{"key":"value","key3":3}`),
+			[]byte(`{"key":"valee","key":"value","key3":3}`),
 			[]byte(` {
-				"key":"value"
-				"key3": 3,
+				"key":"value",
+				"key":"valee",
+				"key3": 3
 			}`),
 		)
 		if len(ft.ErrorCalls) != 0 {
