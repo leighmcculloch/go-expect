@@ -1,4 +1,4 @@
-module 4d63.com/want
+module 4d63.com/test
 
 go 1.16
 

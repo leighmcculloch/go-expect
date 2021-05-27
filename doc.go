@@ -1,28 +1,28 @@
-// Package want is a package that provides equality functions for testing Go
+// Package test is a package that provides equality functions for testing Go
 // code. It is focused on making the most common action in test code simple,
 // testing equality expectations.
 //
 // A simple test function looks like this:
 //
 //     func TestAbs(t *testing.T) {
-//         want.Eq(t, Abs(-1), 1)
+//         test.Eq(t, Abs(-1), 1)
 //     }
 //
 // If the check passes, the verbose output looks like this:
 //
 //     --- PASS: TestAbs (0.00s)
-//         test.go:2: want.Eq(t, Abs(-1), 1): got 1
+//         test.go:2: test.Eq(t, Abs(-1), 1): got 1
 //
 // If the check fails, and the type is a bool, int, or float, the output looks
 // like this:
 //     --- PASS: TestAbs (0.00s)
-//         test.go:2: want.Eq(t, Abs(-1), 1): got 0, want 1
+//         test.go:2: test.Eq(t, Abs(-1), 1): got 0, want 1
 //
 // If the check fails, and the type is a string, array, slice, or complex type,
 // the output looks like this:
 //
 //     --- FAIL: TestAbs (0.00s)
-//         test.go:2: want.Eq(t, Abs(-1), 1): int(
+//         test.go:2: test.Eq(t, Abs(-1), 1): int(
 //         -: 0
 //         +: 1
 //         )
@@ -39,7 +39,7 @@
 // Checks can be nested using the bool return value of a prior check.
 //
 //     func TestAbs(t *testing.T) {
-//         if want.Eq(t, Abs(-1), 1) {
+//         if test.Eq(t, Abs(-1), 1) {
 //             ...
 //         }
 //     }
@@ -49,7 +49,7 @@
 // Checks can cause a test to stop at a failure using the bool return value.
 //
 //     func TestAbs(t *testing.T) {
-//         if !want.Eq(t, Abs(-1), 1) {
+//         if !test.Eq(t, Abs(-1), 1) {
 //             return
 //         }
 //         ...
@@ -60,4 +60,4 @@
 // Comparison of got and want is done using Google's cmp Go module:
 // https://github.com/google/go-cmp/cmp
 //
-package want
+package test

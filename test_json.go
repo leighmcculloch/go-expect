@@ -1,4 +1,4 @@
-package want
+package test
 
 import (
 	"testing"

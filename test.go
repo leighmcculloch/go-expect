@@ -1,4 +1,4 @@
-package want
+package test
 
 import (
 	"io/ioutil"
@@ -168,7 +168,7 @@ func caller() string {
 		if strings.HasPrefix(nextFrame.Function, "runtime.") {
 			continue
 		}
-		if strings.HasPrefix(nextFrame.Function, "4d63.com/want.") {
+		if strings.HasPrefix(nextFrame.Function, "4d63.com/test.") {
 			continue
 		}
 		frame = &nextFrame
