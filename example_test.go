@@ -30,6 +30,19 @@ func ExampleEq_fail() {
 	// test.Eq(t, Abs(-1), 0): got 1, want 0
 }
 
+func ExampleEq_failDiff() {
+	test.Eq(t, "Hello World\nG'day World\n", "Hello World\nG'day Mate")
+	// Output:
+	// test.Eq(t, "Hello World\nG'day World\n", "Hello World\nG'day Mate"):
+	// --- Want
+	// +++ Got
+	// @@ -1,2 +1,3 @@
+	//  Hello World
+	// -G'day Mate
+	// +G'day World
+	// +
+}
+
 func ExampleNotEq_pass() {
 	test.NotEq(t, Abs(-1), -1)
 	// Output:
