@@ -1,15 +1,15 @@
-package want_test
+package test_test
 
 import (
 	"testing"
 
-	"4d63.com/want"
+	"4d63.com/test"
 )
 
 func TestEqJSON(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.EqJSON(
+		b := test.EqJSON(
 			ft,
 			[]byte(`{"key":"valee","key":"value","key3":3}`),
 			[]byte(` {
@@ -27,7 +27,7 @@ func TestEqJSON(t *testing.T) {
 	})
 	t.Run("fail with string diff", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.EqJSON(
+		b := test.EqJSON(
 			ft,
 			[]byte(`{"key":"v alue","key3":3}`),
 			[]byte(` {
@@ -35,7 +35,7 @@ func TestEqJSON(t *testing.T) {
 				"key3": 3
 			}`),
 		)
-		wantErr := `b := want.EqJSON(:
+		wantErr := `b := test.EqJSON(:
 --- Want
 +++ Got
 @@ -1,5 +1,5 @@

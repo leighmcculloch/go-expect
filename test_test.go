@@ -1,16 +1,16 @@
-package want_test
+package test_test
 
 import (
 	"io"
 	"testing"
 
-	"4d63.com/want"
+	"4d63.com/test"
 )
 
 func TestEq(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.Eq(ft, "a", "a")
+		b := test.Eq(ft, "a", "a")
 		if len(ft.ErrorCalls) != 0 {
 			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
 		}
@@ -20,8 +20,8 @@ func TestEq(t *testing.T) {
 	})
 	t.Run("fail without diff", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.Eq(ft, 0, 1)
-		wantErr := `b := want.Eq(ft, 0, 1): got 0, want 1`
+		b := test.Eq(ft, 0, 1)
+		wantErr := `b := test.Eq(ft, 0, 1): got 0, want 1`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
@@ -31,8 +31,8 @@ func TestEq(t *testing.T) {
 	})
 	t.Run("fail with string diff when comparing strings", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng")
-		wantErr := `b := want.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng"):
+		b := test.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng")
+		wantErr := `b := test.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng"):
 --- Want
 +++ Got
 @@ -1,5 +1,5 @@
@@ -55,12 +55,12 @@ func TestEq(t *testing.T) {
 		type value struct {
 			Name string
 		}
-		b := want.Eq(ft, value{"A"}, value{"B"})
-		wantErr := `b := want.Eq(ft, value{"A"}, value{"B"}):
+		b := test.Eq(ft, value{"A"}, value{"B"})
+		wantErr := `b := test.Eq(ft, value{"A"}, value{"B"}):
 --- Want
 +++ Got
 @@ -1,4 +1,4 @@
- (want_test.value) {
+ (test_test.value) {
 - Name: (string) (len=1) "B"
 + Name: (string) (len=1) "A"
  }
@@ -78,7 +78,7 @@ func TestEq(t *testing.T) {
 func TestNotEq(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.NotEq(ft, "a", "b")
+		b := test.NotEq(ft, "a", "b")
 		if len(ft.ErrorCalls) != 0 {
 			t.Fatalf("got %+q, want 0 errors", ft.ErrorCalls)
 		}
@@ -88,8 +88,8 @@ func TestNotEq(t *testing.T) {
 	})
 	t.Run("fail", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.NotEq(ft, "a", "a")
-		wantErr := `b := want.NotEq(ft, "a", "a"): got a, want not a`
+		b := test.NotEq(ft, "a", "a")
+		wantErr := `b := test.NotEq(ft, "a", "a"): got a, want not a`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
@@ -103,7 +103,7 @@ func TestNil(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
 		var err error
-		b := want.Nil(ft, err)
+		b := test.Nil(ft, err)
 		if len(ft.ErrorCalls) != 0 {
 			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
 		}
@@ -114,8 +114,8 @@ func TestNil(t *testing.T) {
 	t.Run("fail", func(t *testing.T) {
 		ft := &fakeT{}
 		var err = error(io.EOF)
-		b := want.Nil(ft, err)
-		wantErr := `b := want.Nil(ft, err): got EOF, want <nil>`
+		b := test.Nil(ft, err)
+		wantErr := `b := test.Nil(ft, err): got EOF, want <nil>`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
@@ -129,7 +129,7 @@ func TestNotNil(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
 		var err = error(io.EOF)
-		b := want.NotNil(ft, err)
+		b := test.NotNil(ft, err)
 		if len(ft.ErrorCalls) != 0 {
 			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
 		}
@@ -140,8 +140,8 @@ func TestNotNil(t *testing.T) {
 	t.Run("fail", func(t *testing.T) {
 		ft := &fakeT{}
 		var err error
-		b := want.NotNil(ft, err)
-		wantErr := `b := want.NotNil(ft, err): got <nil>, want not <nil>`
+		b := test.NotNil(ft, err)
+		wantErr := `b := test.NotNil(ft, err): got <nil>, want not <nil>`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
@@ -154,7 +154,7 @@ func TestNotNil(t *testing.T) {
 func TestTrue(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.True(ft, true)
+		b := test.True(ft, true)
 		if len(ft.ErrorCalls) != 0 {
 			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
 		}
@@ -164,8 +164,8 @@ func TestTrue(t *testing.T) {
 	})
 	t.Run("fail", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.True(ft, false)
-		wantErr := `b := want.True(ft, false): got false, want true`
+		b := test.True(ft, false)
+		wantErr := `b := test.True(ft, false): got false, want true`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
@@ -178,7 +178,7 @@ func TestTrue(t *testing.T) {
 func TestFalse(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.False(ft, false)
+		b := test.False(ft, false)
 		if len(ft.ErrorCalls) != 0 {
 			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
 		}
@@ -188,8 +188,8 @@ func TestFalse(t *testing.T) {
 	})
 	t.Run("fail", func(t *testing.T) {
 		ft := &fakeT{}
-		b := want.False(ft, true)
-		wantErr := `b := want.False(ft, true): got true, want false`
+		b := test.False(ft, true)
+		wantErr := `b := test.False(ft, true): got true, want false`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}

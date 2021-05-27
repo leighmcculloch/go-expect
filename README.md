@@ -1,6 +1,6 @@
-# 4d63.com/want
+# 4d63.com/test
 
-[![Go Reference](https://pkg.go.dev/badge/4d63.com/want.svg)](https://pkg.go.dev/4d63.com/want)
+[![Go Reference](https://pkg.go.dev/badge/4d63.com/test.svg)](https://pkg.go.dev/4d63.com/test)
 
 Go test library that delivers simple test assertions with useful verbose output.
 
@@ -12,7 +12,7 @@ import (
 	"testing"
 	"unicode"
 
-	"4d63.com/want"
+	"4d63.com/test"
 )
 
 func Abs(i int) int {
@@ -23,8 +23,8 @@ func Abs(i int) int {
 }
 
 func TestAbs(t *testing.T) {
-	want.Eq(t, Abs(-1), 1)
-	want.Eq(t, Abs(-1), 0) // will fail
+	test.Eq(t, Abs(-1), 1)
+	test.Eq(t, Abs(-1), 0) // will fail
 }
 
 func Title(s string) string {
@@ -43,21 +43,21 @@ func Title(s string) string {
 }
 
 func TestTitle(t *testing.T) {
-	want.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nFriendly\nWorld")
-	want.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nfriendly\nWorld") // will fail
+	test.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nFriendly\nWorld")
+	test.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nfriendly\nWorld") // will fail
 }
 ```
 
 ```
 $ go test -v
 --- FAIL: TestAbs (0.00s)
-    readme_test.go:21: want.Eq(t, Abs(-1), 1): got 1
-    readme_test.go:22: want.Eq(t, Abs(-1), 0): got 1, want 0
+    readme_test.go:21: test.Eq(t, Abs(-1), 1): got 1
+    readme_test.go:22: test.Eq(t, Abs(-1), 0): got 1, want 0
 --- FAIL: TestTitle (0.00s)
-    readme_test.go:41: want.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nFriendly\nWorld"): got Hello
+    readme_test.go:41: test.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nFriendly\nWorld"): got Hello
         Friendly
         World
-    readme_test.go:42: want.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nfriendly\nWorld"):
+    readme_test.go:42: test.Eq(t, Title("hello\nfriendly\nworld"), "Hello\nfriendly\nWorld"):
         --- Want
         +++ Got
         @@ -1,3 +1,3 @@
