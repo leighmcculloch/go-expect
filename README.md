@@ -4,6 +4,14 @@
 
 Go test library that delivers simple test assertions with useful verbose output.
 
+ - [x] Lightweight
+ - [x] Simplicity of [testify](https://github.com/stretchr/testify)
+ - [x] Verbose logs based on successful assertions
+ - [x] Concise git diff comparisons
+ - [x] JSON comparisons (powered by [pretty](https://github.com/tidwall/pretty))
+ - [ ] Regex comparisons
+ - [ ] Error is/as comparisons
+
 ## Usage
 
 ```go

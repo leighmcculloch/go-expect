@@ -102,58 +102,6 @@ func NotEq(tb testing.TB, got, notWant interface{}) bool {
 	return notEq
 }
 
-// Nil checks if got is nil and reports an error to tb if it is not nil.
-// Returns true if nil.
-func Nil(tb testing.TB, got interface{}) bool {
-	tb.Helper()
-	isNil := got == nil
-	if isNil {
-		tb.Logf("%s: got %+v", caller(), got)
-	} else {
-		tb.Errorf("%s: got %+v, want <nil>", caller(), got)
-	}
-	return isNil
-}
-
-// NotNil checks if got is not nil and reports an error to tb if it is nil.
-// Returns true if not nil.
-func NotNil(tb testing.TB, got interface{}) bool {
-	tb.Helper()
-	notNil := got != nil
-	if notNil {
-		tb.Logf("%s: got %+v, not <nil>", caller(), got)
-	} else {
-		tb.Errorf("%s: got %+v, want not <nil>", caller(), got)
-	}
-	return notNil
-}
-
-// True checks if got is true and reports an error to tb if it is not true.
-// Returns true if true.
-func True(tb testing.TB, got bool) bool {
-	tb.Helper()
-	isTrue := got
-	if isTrue {
-		tb.Logf("%s: got %+v", caller(), got)
-	} else {
-		tb.Errorf("%s: got %+v, want true", caller(), got)
-	}
-	return isTrue
-}
-
-// False checks if got is false and reports an error to tb if it is not false.
-// Returns true if false.
-func False(tb testing.TB, got bool) bool {
-	tb.Helper()
-	isFalse := !got
-	if isFalse {
-		tb.Logf("%s: got %+v", caller(), got)
-	} else {
-		tb.Errorf("%s: got %+v, want false", caller(), got)
-	}
-	return isFalse
-}
-
 func caller() string {
 	const maxCallDepth = 10
 	callers := [maxCallDepth]uintptr{}

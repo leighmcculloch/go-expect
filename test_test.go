@@ -1,7 +1,6 @@
 package test_test
 
 import (
-	"io"
 	"testing"
 
 	"4d63.com/test"
@@ -92,106 +91,6 @@ func TestNotEq(t *testing.T) {
 		wantErr := `b := test.NotEq(ft, "a", "a"): got a, want not a`
 		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
 			t.Fatalf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
-		}
-		if b {
-			t.Errorf("got %v, want false", b)
-		}
-	})
-}
-
-func TestNil(t *testing.T) {
-	t.Run("pass", func(t *testing.T) {
-		ft := &fakeT{}
-		var err error
-		b := test.Nil(ft, err)
-		if len(ft.ErrorCalls) != 0 {
-			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
-		}
-		if !b {
-			t.Errorf("got %v, want true", b)
-		}
-	})
-	t.Run("fail", func(t *testing.T) {
-		ft := &fakeT{}
-		var err = error(io.EOF)
-		b := test.Nil(ft, err)
-		wantErr := `b := test.Nil(ft, err): got EOF, want <nil>`
-		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
-			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
-		}
-		if b {
-			t.Errorf("got %v, want false", b)
-		}
-	})
-}
-
-func TestNotNil(t *testing.T) {
-	t.Run("pass", func(t *testing.T) {
-		ft := &fakeT{}
-		var err = error(io.EOF)
-		b := test.NotNil(ft, err)
-		if len(ft.ErrorCalls) != 0 {
-			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
-		}
-		if !b {
-			t.Errorf("got %v, want true", b)
-		}
-	})
-	t.Run("fail", func(t *testing.T) {
-		ft := &fakeT{}
-		var err error
-		b := test.NotNil(ft, err)
-		wantErr := `b := test.NotNil(ft, err): got <nil>, want not <nil>`
-		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
-			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
-		}
-		if b {
-			t.Errorf("got %v, want false", b)
-		}
-	})
-}
-
-func TestTrue(t *testing.T) {
-	t.Run("pass", func(t *testing.T) {
-		ft := &fakeT{}
-		b := test.True(ft, true)
-		if len(ft.ErrorCalls) != 0 {
-			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
-		}
-		if !b {
-			t.Errorf("got %v, want true", b)
-		}
-	})
-	t.Run("fail", func(t *testing.T) {
-		ft := &fakeT{}
-		b := test.True(ft, false)
-		wantErr := `b := test.True(ft, false): got false, want true`
-		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
-			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
-		}
-		if b {
-			t.Errorf("got %v, want false", b)
-		}
-	})
-}
-
-func TestFalse(t *testing.T) {
-	t.Run("pass", func(t *testing.T) {
-		ft := &fakeT{}
-		b := test.False(ft, false)
-		if len(ft.ErrorCalls) != 0 {
-			t.Errorf("got %+q, want 0 errors", ft.ErrorCalls)
-		}
-		if !b {
-			t.Errorf("got %v, want true", b)
-		}
-	})
-	t.Run("fail", func(t *testing.T) {
-		ft := &fakeT{}
-		b := test.False(ft, true)
-		wantErr := `b := test.False(ft, true): got true, want false`
-		if len(ft.ErrorCalls) != 1 || ft.ErrorCalls[0] != wantErr {
-			t.Errorf("got %+q, want 1 error %q", ft.ErrorCalls, wantErr)
 		}
 		if b {
 			t.Errorf("got %v, want false", b)
