@@ -6,8 +6,10 @@ import (
 	"4d63.com/test"
 )
 
-var t testing.TB = &printT{}
-var thing = 0
+var (
+	t     testing.TB = &printT{}
+	thing            = 0
+)
 
 func Abs(i int) int {
 	if i < 0 {
@@ -38,4 +40,43 @@ func ExampleNotEq_fail() {
 	test.NotEq(t, Abs(-1), 1)
 	// Output:
 	// test.NotEq(t, Abs(-1), 1): got 1, want not 1
+}
+
+func ExampleEqJSON_pass() {
+	test.EqJSON(
+		t,
+		[]byte(`{"key":"value1","key":"value2","key3":3}`),
+		[]byte(` {
+				"key":"value2",
+				"key":"value1",
+				"key3": 3
+			}`),
+	)
+	// Output:
+	// test.EqJSON(: got {
+	//   "key": "value1",
+	//   "key": "value2",
+	//   "key3": 3
+	// }
+}
+
+func ExampleEqJSON_fail() {
+	test.EqJSON(
+		t,
+		[]byte(`{"key":"value1","key3":3}`),
+		[]byte(` {
+				"key3": 3
+				"key":"value2",
+			}`),
+	)
+	// Output:
+	// test.EqJSON(:
+	// --- Want
+	// +++ Got
+	// @@ -1,5 +1,5 @@
+	//  {
+	// -  "key": "value2",
+	// +  "key": "value1",
+	//    "key3": 3
+	//  }
 }
