@@ -13,10 +13,10 @@ Go test library that delivers simple test assertions with useful verbose output.
  - [x] JSON comparisons (powered by [pretty](https://github.com/tidwall/pretty))
 
 ## Todo
- - [ ] Slice comparisons
- - [ ] Map comparisons
- - [ ] Regex comparisons
  - [ ] Error is/as comparisons
+ - [ ] Slice contains
+ - [ ] Map contains
+ - [ ] Regex comparisons
 
 ## Usage
 

@@ -18,8 +18,7 @@
 //     --- PASS: TestAbs (0.00s)
 //         test.go:2: test.Eq(t, Abs(-1), 1): got 0, want 1
 //
-// If the check fails, and the type is a string, array, slice, or complex type,
-// the output looks like this:
+// If the check fails, and the type is a string, the output looks like this:
 //
 //     --- FAIL: TestGoGophers (0.00s)
 //         test.go:2: test.Eq(t, "Golang\nGophers", "Go\nGophers"):
@@ -29,6 +28,34 @@
 //         -Golang
 //         +Go
 //          Gophers
+//
+// If the check fails, and the type is an array or slice, the output looks like
+// this:
+//
+//     --- FAIL: TestGoGophers (0.00s)
+//         test.go:2: test.Eq(t, []string{"Golang", "Gophers"}, []string{"Go", "Gophers"}):
+//         --- got
+//         +++ want
+//         @@ -1,5 +1,5 @@
+//          ([]string) (len=2) {
+//         - (string) (len=6) "Golang",
+//         + (string) (len=2) "Go",
+//           (string) (len=7) "Gophers"
+//          }
+//
+// If the check fails, and the type is a struct value, the output looks like
+// this:
+//
+//     --- FAIL: TestGoGophers (0.00s)
+//         test.go:2: test.Eq(t, struct{Name string; Age int}{"A", 44}, struct{Name string; Age int}{"a", 44}):
+//         --- got
+//         +++ want
+//         @@ -1,5 +1,5 @@
+//          (struct { Name string; Age int }) {
+//         - Name: (string) (len=1) "A",
+//         + Name: (string) (len=1) "a",
+//           Age: (int) 44
+//          }
 //
 // Got and want
 //
