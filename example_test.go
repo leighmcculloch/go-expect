@@ -15,7 +15,7 @@ func Abs(i int) int {
 	return i
 }
 
-func ExampleEq_ass() {
+func ExampleEq_pass() {
 	test.Eq(t, Abs(-1), 1)
 	// Output:
 	// test.Eq(t, Abs(-1), 1): got 1
