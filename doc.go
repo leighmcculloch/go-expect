@@ -21,11 +21,14 @@
 // If the check fails, and the type is a string, array, slice, or complex type,
 // the output looks like this:
 //
-//     --- FAIL: TestAbs (0.00s)
-//         test.go:2: test.Eq(t, Abs(-1), 1): int(
-//         -: 0
-//         +: 1
-//         )
+//     --- FAIL: TestGoGophers (0.00s)
+//         test.go:2: test.Eq(t, "Golang\nGophers", "Go\nGophers"):
+//         --- got
+//         +++ want
+//         @@ -1,2 +1,2 @@
+//         -Golang
+//         +Go
+//          Gophers
 //
 // Got and want
 //
