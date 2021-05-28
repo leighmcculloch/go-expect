@@ -57,7 +57,7 @@
 //
 // Comparison
 //
-// Comparison of got and want is done using Google's cmp Go module:
+// Comparison of values is performed using Google's cmp Go module:
 // https://github.com/google/go-cmp/cmp
 //
 package test
