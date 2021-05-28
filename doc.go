@@ -2,6 +2,8 @@
 // code. It is focused on making the most common action in test code simple,
 // testing equality expectations.
 //
+// Usage
+//
 // A simple test function looks like this:
 //
 //     func TestAbs(t *testing.T) {
