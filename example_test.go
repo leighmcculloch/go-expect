@@ -6,10 +6,7 @@ import (
 	"4d63.com/test"
 )
 
-var (
-	t     testing.TB = &printT{}
-	thing            = 0
-)
+var t testing.TB = &printT{}
 
 func Abs(i int) int {
 	if i < 0 {
