@@ -31,13 +31,13 @@ func ExampleEq_failDiff() {
 	test.Eq(t, "Hello World\nG'day World\n", "Hello World\nG'day Mate")
 	// Output:
 	// test.Eq(t, "Hello World\nG'day World\n", "Hello World\nG'day Mate"):
-	// --- Want
-	// +++ Got
-	// @@ -1,2 +1,3 @@
+	// --- got
+	// +++ want
+	// @@ -1,3 +1,2 @@
 	//  Hello World
-	// -G'day Mate
-	// +G'day World
-	// +
+	// -G'day World
+	// -
+	// +G'day Mate
 }
 
 func ExampleNotEq_pass() {
@@ -81,12 +81,12 @@ func ExampleEqJSON_fail() {
 	)
 	// Output:
 	// test.EqJSON(:
-	// --- Want
-	// +++ Got
+	// --- got
+	// +++ want
 	// @@ -1,5 +1,5 @@
 	//  {
-	// -  "key": "value2",
-	// +  "key": "value1",
+	// -  "key": "value1",
+	// +  "key": "value2",
 	//    "key3": 3
 	//  }
 }

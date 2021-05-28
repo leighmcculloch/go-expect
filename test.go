@@ -51,10 +51,10 @@ func Eq(tb testing.TB, got, want interface{}) bool {
 
 	if displayStringDiff(got) || displayStringDiff(want) {
 		diff := difflib.UnifiedDiff{
-			A:        difflib.SplitLines(want.(string)),
-			B:        difflib.SplitLines(got.(string)),
-			FromFile: "Want",
-			ToFile:   "Got",
+			A:        difflib.SplitLines(got.(string)),
+			B:        difflib.SplitLines(want.(string)),
+			FromFile: "got",
+			ToFile:   "want",
 			Context:  3,
 		}
 		text, _ := difflib.GetUnifiedDiffString(diff)
@@ -74,10 +74,10 @@ func Eq(tb testing.TB, got, want interface{}) bool {
 		gotS := spew.Sdump(got)
 		wantS := spew.Sdump(want)
 		diff := difflib.UnifiedDiff{
-			A:        difflib.SplitLines(wantS),
-			B:        difflib.SplitLines(gotS),
-			FromFile: "Want",
-			ToFile:   "Got",
+			A:        difflib.SplitLines(gotS),
+			B:        difflib.SplitLines(wantS),
+			FromFile: "got",
+			ToFile:   "want",
 			Context:  3,
 		}
 		text, _ := difflib.GetUnifiedDiffString(diff)

@@ -32,12 +32,12 @@ func TestEq(t *testing.T) {
 		ft := &fakeT{}
 		b := test.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng")
 		wantErr := `b := test.Eq(ft, "a\nb\nc\nd\ne\nf\ng", "a\nz\nc\nd\ne\nf\ng"):
---- Want
-+++ Got
+--- got
++++ want
 @@ -1,5 +1,5 @@
  a
--z
-+b
+-b
++z
  c
  d
  e
@@ -56,12 +56,12 @@ func TestEq(t *testing.T) {
 		}
 		b := test.Eq(ft, value{"A"}, value{"B"})
 		wantErr := `b := test.Eq(ft, value{"A"}, value{"B"}):
---- Want
-+++ Got
+--- got
++++ want
 @@ -1,4 +1,4 @@
  (test_test.value) {
-- Name: (string) (len=1) "B"
-+ Name: (string) (len=1) "A"
+- Name: (string) (len=1) "A"
++ Name: (string) (len=1) "B"
  }
  
 `

@@ -36,12 +36,12 @@ func TestEqJSON(t *testing.T) {
 			}`),
 		)
 		wantErr := `b := test.EqJSON(:
---- Want
-+++ Got
+--- got
++++ want
 @@ -1,5 +1,5 @@
  {
--  "key": "value",
-+  "key": "v alue",
+-  "key": "v alue",
++  "key": "value",
    "key3": 3
  }
  
