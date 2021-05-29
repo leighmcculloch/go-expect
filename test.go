@@ -12,17 +12,6 @@ import (
 	"github.com/pmezard/go-difflib/difflib"
 )
 
-// displayStringDiff returns if a diff should be displayed as a simple comparison
-// of two strings when comparing the value.
-func displayStringDiff(v interface{}) bool {
-	t := reflect.TypeOf(v)
-	switch t.Kind() {
-	case reflect.String:
-		return true
-	}
-	return false
-}
-
 // displayDumpDiff returns if a diff should be displayed as a spew dump when
 // comparing the value.
 func displayDumpDiff(v interface{}) bool {
@@ -49,10 +38,12 @@ func Equal(tb testing.TB, got, want interface{}) bool {
 		return eq
 	}
 
-	if displayStringDiff(got) || displayStringDiff(want) {
+	gotStr, gotStrOK := got.(string)
+	wantStr, wantStrOK := want.(string)
+	if gotStrOK && wantStrOK {
 		diff := difflib.UnifiedDiff{
-			A:        difflib.SplitLines(got.(string)),
-			B:        difflib.SplitLines(want.(string)),
+			A:        difflib.SplitLines(gotStr),
+			B:        difflib.SplitLines(wantStr),
 			FromFile: "got",
 			ToFile:   "want",
 			Context:  3,
@@ -71,11 +62,11 @@ func Equal(tb testing.TB, got, want interface{}) bool {
 			SortKeys:                true,
 			SpewKeys:                true,
 		}
-		gotS := spew.Sdump(got)
-		wantS := spew.Sdump(want)
+		gotDump := spew.Sdump(got)
+		wantDump := spew.Sdump(want)
 		diff := difflib.UnifiedDiff{
-			A:        difflib.SplitLines(gotS),
-			B:        difflib.SplitLines(wantS),
+			A:        difflib.SplitLines(gotDump),
+			B:        difflib.SplitLines(wantDump),
 			FromFile: "got",
 			ToFile:   "want",
 			Context:  3,
