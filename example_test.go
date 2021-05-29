@@ -27,15 +27,15 @@ func ExampleEqual_fail() {
 	// test.Equal(t, Abs(-1), 0): got 1, want 0
 }
 
-func ExampleEqual_failDiffTypes() {
-	test.Equal(t, 1, "Hello World\nG'day Mate")
+func ExampleEqual_failComparingDifferentTypes() {
+	test.Equal(t, 1, 1.0)
 	// Output:
-	// test.Equal(t, 1, "Hello World\nG'day Mate"):
+	// test.Equal(t, 1, 1.0):
 	// --- got
 	// +++ want
 	// @@ -1,2 +1,2 @@
 	// -(int) 1
-	// +(string) (len=22) "Hello World\nG'day Mate"
+	// +(float64) 1
 }
 
 func ExampleEqual_failDiff() {

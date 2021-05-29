@@ -13,10 +13,18 @@ import (
 )
 
 // displayDumpDiff returns if a diff should be displayed as a spew dump when
-// comparing the value.
-func displayDumpDiff(v interface{}) bool {
-	t := reflect.TypeOf(v)
-	switch t.Kind() {
+// comparing the values.
+func displayDumpDiff(v1, v2 interface{}) bool {
+	// If the types are different, display a dump diff.
+	t1 := reflect.TypeOf(v1)
+	t2 := reflect.TypeOf(v2)
+	if t1 != t2 {
+		return true
+	}
+
+	// If the type of the values is a simple primitive type, don't display a
+	// dump diff.
+	switch t1.Kind() {
 	case reflect.Bool,
 		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr,
@@ -52,8 +60,7 @@ func Equal(tb testing.TB, got, want interface{}) bool {
 		tb.Errorf("%s:\n%s", caller(), text)
 		return eq
 	}
-
-	if displayDumpDiff(got) || displayDumpDiff(want) {
+	if displayDumpDiff(got, want) {
 		spew := spew.ConfigState{
 			Indent:                  " ",
 			DisableMethods:          true,
