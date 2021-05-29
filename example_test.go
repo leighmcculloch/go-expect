@@ -15,22 +15,25 @@ func Abs(i int) int {
 	return i
 }
 
-func ExampleEqual_pass() {
-	test.Equal(t, Abs(-1), 1)
+func ExampleT_Equal_pass() {
+	t := test.T{t}
+	t.Equal(Abs(-1), 1)
 	// Output:
-	// test.Equal(t, Abs(-1), 1): got 1
+	// t.Equal(Abs(-1), 1): got 1
 }
 
-func ExampleEqual_fail() {
-	test.Equal(t, Abs(-1), 0)
+func ExampleT_Equal_fail() {
+	tt := test.New(t)
+	tt.Equal(Abs(-1), 0)
 	// Output:
-	// test.Equal(t, Abs(-1), 0): got 1, want 0
+	// tt.Equal(Abs(-1), 0): got 1, want 0
 }
 
-func ExampleEqual_failComparingDifferentTypes() {
-	test.Equal(t, 1, 1.0)
+func ExampleT_Equal_failComparingDifferentTypes() {
+	tt := test.New(t)
+	tt.Equal(1, 1.0)
 	// Output:
-	// test.Equal(t, 1, 1.0):
+	// tt.Equal(1, 1.0):
 	// --- got
 	// +++ want
 	// @@ -1,2 +1,2 @@
@@ -38,10 +41,11 @@ func ExampleEqual_failComparingDifferentTypes() {
 	// +(float64) 1
 }
 
-func ExampleEqual_failDiff() {
-	test.Equal(t, "Hello World\nG'day World\n", "Hello World\nG'day Mate")
+func ExampleT_Equal_failDiff() {
+	tt := test.New(t)
+	tt.Equal("Hello World\nG'day World\n", "Hello World\nG'day Mate")
 	// Output:
-	// test.Equal(t, "Hello World\nG'day World\n", "Hello World\nG'day Mate"):
+	// tt.Equal("Hello World\nG'day World\n", "Hello World\nG'day Mate"):
 	// --- got
 	// +++ want
 	// @@ -1,3 +1,2 @@
@@ -51,21 +55,23 @@ func ExampleEqual_failDiff() {
 	// +G'day Mate
 }
 
-func ExampleNotEqual_pass() {
-	test.NotEqual(t, Abs(-1), -1)
+func ExampleT_NotEqual_pass() {
+	tt := test.New(t)
+	tt.NotEqual(Abs(-1), -1)
 	// Output:
-	// test.NotEqual(t, Abs(-1), -1): got 1, not -1
+	// tt.NotEqual(Abs(-1), -1): got 1, not -1
 }
 
-func ExampleNotEqual_fail() {
-	test.NotEqual(t, Abs(-1), 1)
+func ExampleT_NotEqual_fail() {
+	tt := test.New(t)
+	tt.NotEqual(Abs(-1), 1)
 	// Output:
-	// test.NotEqual(t, Abs(-1), 1): got 1, want not 1
+	// tt.NotEqual(Abs(-1), 1): got 1, want not 1
 }
 
-func ExampleEqualJSON_pass() {
-	test.EqualJSON(
-		t,
+func ExampleT_EqualJSON_pass() {
+	tt := test.New(t)
+	tt.EqualJSON(
 		[]byte(`{"key":"value1","key":"value2","key3":3}`),
 		[]byte(` {
 				"key":"value2",
@@ -74,16 +80,16 @@ func ExampleEqualJSON_pass() {
 			}`),
 	)
 	// Output:
-	// test.EqualJSON(: got {
+	// tt.EqualJSON(: got {
 	//   "key": "value1",
 	//   "key": "value2",
 	//   "key3": 3
 	// }
 }
 
-func ExampleEqualJSON_fail() {
-	test.EqualJSON(
-		t,
+func ExampleT_EqualJSON_fail() {
+	tt := test.New(t)
+	tt.EqualJSON(
 		[]byte(`{"key":"value1","key3":3}`),
 		[]byte(` {
 				"key3": 3
@@ -91,7 +97,7 @@ func ExampleEqualJSON_fail() {
 			}`),
 	)
 	// Output:
-	// test.EqualJSON(:
+	// tt.EqualJSON(:
 	// --- got
 	// +++ want
 	// @@ -1,5 +1,5 @@

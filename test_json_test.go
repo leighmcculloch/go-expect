@@ -9,8 +9,8 @@ import (
 func TestEqualJSON(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		b := test.EqualJSON(
-			ft,
+		tt := test.New(ft)
+		b := tt.EqualJSON(
 			[]byte(`{"key":"valee","key":"value","key3":3}`),
 			[]byte(` {
 				"key":"value",
@@ -27,15 +27,15 @@ func TestEqualJSON(t *testing.T) {
 	})
 	t.Run("fail with string diff", func(t *testing.T) {
 		ft := &fakeT{}
-		b := test.EqualJSON(
-			ft,
+		tt := test.New(ft)
+		b := tt.EqualJSON(
 			[]byte(`{"key":"v alue","key3":3}`),
 			[]byte(` {
 				"key":"value",
 				"key3": 3
 			}`),
 		)
-		wantErr := `b := test.EqualJSON(:
+		wantErr := `b := tt.EqualJSON(:
 --- got
 +++ want
 @@ -1,5 +1,5 @@

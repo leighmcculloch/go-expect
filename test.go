@@ -12,37 +12,23 @@ import (
 	"github.com/pmezard/go-difflib/difflib"
 )
 
-// displayDumpDiff returns if a diff should be displayed as a spew dump when
-// comparing the values.
-func displayDumpDiff(v1, v2 interface{}) bool {
-	// If the types are different, display a dump diff.
-	t1 := reflect.TypeOf(v1)
-	t2 := reflect.TypeOf(v2)
-	if t1 != t2 {
-		return true
-	}
+type T struct {
+	testing.TB
+}
 
-	// If the type of the values is a simple primitive type, don't display a
-	// dump diff.
-	switch t1.Kind() {
-	case reflect.Bool,
-		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr,
-		reflect.Float32, reflect.Float64,
-		reflect.Complex64, reflect.Complex128:
-		return false
-	}
-	return true
+// New creates a new T.
+func New(t testing.TB) *T {
+	return &T{t}
 }
 
 // Equal compares got to want and reports an error to tb if they are not equal.
 // Returns true if equal.
-func Equal(tb testing.TB, got, want interface{}) bool {
-	tb.Helper()
+func (t *T) Equal(got, want interface{}) bool {
+	t.Helper()
 
 	eq := cmp.Equal(got, want)
 	if eq {
-		tb.Logf("%s: got %+v", caller(), got)
+		t.Logf("%s: got %+v", caller(), got)
 		return eq
 	}
 
@@ -57,7 +43,7 @@ func Equal(tb testing.TB, got, want interface{}) bool {
 			Context:  3,
 		}
 		text, _ := difflib.GetUnifiedDiffString(diff)
-		tb.Errorf("%s:\n%s", caller(), text)
+		t.Errorf("%s:\n%s", caller(), text)
 		return eq
 	}
 	if displayDumpDiff(got, want) {
@@ -79,25 +65,48 @@ func Equal(tb testing.TB, got, want interface{}) bool {
 			Context:  3,
 		}
 		text, _ := difflib.GetUnifiedDiffString(diff)
-		tb.Errorf("%s:\n%s", caller(), text)
+		t.Errorf("%s:\n%s", caller(), text)
 		return eq
 	}
 
-	tb.Errorf("%s: got %+v, want %+v", caller(), got, want)
+	t.Errorf("%s: got %+v, want %+v", caller(), got, want)
 	return eq
 }
 
 // NotEqual compares got to want and reports an error to tb if they are equal.
 // Returns true if not equal.
-func NotEqual(tb testing.TB, got, notWant interface{}) bool {
-	tb.Helper()
+func (t *T) NotEqual(got, notWant interface{}) bool {
+	t.Helper()
 	notEqual := !cmp.Equal(got, notWant)
 	if notEqual {
-		tb.Logf("%s: got %+v, not %+v", caller(), got, notWant)
+		t.Logf("%s: got %+v, not %+v", caller(), got, notWant)
 	} else {
-		tb.Errorf("%s: got %+v, want not %+v", caller(), got, notWant)
+		t.Errorf("%s: got %+v, want not %+v", caller(), got, notWant)
 	}
 	return notEqual
+}
+
+// displayDumpDiff returns if a diff should be displayed as a spew dump when
+// comparing the values.
+func displayDumpDiff(v1, v2 interface{}) bool {
+	// If the types are different, display a dump diff.
+	t1 := reflect.TypeOf(v1)
+	t2 := reflect.TypeOf(v2)
+	if t1 != t2 {
+		return true
+	}
+
+	// If the type of the values is a simple primitive type, don't display a
+	// dump diff.
+	switch t1.Kind() {
+	case reflect.Bool,
+		reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr,
+		reflect.Float32, reflect.Float64,
+		reflect.Complex64, reflect.Complex128:
+		return false
+	}
+	return true
 }
 
 func caller() string {
