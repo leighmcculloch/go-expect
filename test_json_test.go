@@ -6,10 +6,10 @@ import (
 	"4d63.com/test"
 )
 
-func TestEqJSON(t *testing.T) {
+func TestEqualJSON(t *testing.T) {
 	t.Run("pass", func(t *testing.T) {
 		ft := &fakeT{}
-		b := test.EqJSON(
+		b := test.EqualJSON(
 			ft,
 			[]byte(`{"key":"valee","key":"value","key3":3}`),
 			[]byte(` {
@@ -27,7 +27,7 @@ func TestEqJSON(t *testing.T) {
 	})
 	t.Run("fail with string diff", func(t *testing.T) {
 		ft := &fakeT{}
-		b := test.EqJSON(
+		b := test.EqualJSON(
 			ft,
 			[]byte(`{"key":"v alue","key3":3}`),
 			[]byte(` {
@@ -35,7 +35,7 @@ func TestEqJSON(t *testing.T) {
 				"key3": 3
 			}`),
 		)
-		wantErr := `b := test.EqJSON(:
+		wantErr := `b := test.EqualJSON(:
 --- got
 +++ want
 @@ -1,5 +1,5 @@

@@ -7,23 +7,23 @@
 // A simple test function looks like this:
 //
 //     func TestAbs(t *testing.T) {
-//         test.Eq(t, Abs(-1), 1)
+//         test.Equal(t, Abs(-1), 1)
 //     }
 //
 // If the check passes, the verbose output looks like this:
 //
 //     --- PASS: TestAbs (0.00s)
-//         test.go:2: test.Eq(t, Abs(-1), 1): got 1
+//         test.go:2: test.Equal(t, Abs(-1), 1): got 1
 //
 // If the check fails, and the type is a bool, int, or float, the output looks
 // like this:
 //     --- PASS: TestAbs (0.00s)
-//         test.go:2: test.Eq(t, Abs(-1), 1): got 0, want 1
+//         test.go:2: test.Equal(t, Abs(-1), 1): got 0, want 1
 //
 // If the check fails, and the type is a string, the output looks like this:
 //
 //     --- FAIL: TestGoGophers (0.00s)
-//         test.go:2: test.Eq(t, "Golang\nGophers", "Go\nGophers"):
+//         test.go:2: test.Equal(t, "Golang\nGophers", "Go\nGophers"):
 //         --- got
 //         +++ want
 //         @@ -1,2 +1,2 @@
@@ -35,7 +35,7 @@
 // this:
 //
 //     --- FAIL: TestGoGophers (0.00s)
-//         test.go:2: test.Eq(t, []string{"Golang", "Gophers"}, []string{"Go", "Gophers"}):
+//         test.go:2: test.Equal(t, []string{"Golang", "Gophers"}, []string{"Go", "Gophers"}):
 //         --- got
 //         +++ want
 //         @@ -1,5 +1,5 @@
@@ -49,7 +49,7 @@
 // this:
 //
 //     --- FAIL: TestGoGophers (0.00s)
-//         test.go:2: test.Eq(t, struct{Name string; Age int}{"A", 44}, struct{Name string; Age int}{"a", 44}):
+//         test.go:2: test.Equal(t, struct{Name string; Age int}{"A", 44}, struct{Name string; Age int}{"a", 44}):
 //         --- got
 //         +++ want
 //         @@ -1,5 +1,5 @@
@@ -71,7 +71,7 @@
 // Checks can be nested using the bool return value of a prior check.
 //
 //     func TestAbs(t *testing.T) {
-//         if test.Eq(t, Abs(-1), 1) {
+//         if test.Equal(t, Abs(-1), 1) {
 //             ...
 //         }
 //     }
@@ -81,7 +81,7 @@
 // Checks can cause a test to stop at a failure using the bool return value.
 //
 //     func TestAbs(t *testing.T) {
-//         if !test.Eq(t, Abs(-1), 1) {
+//         if !test.Equal(t, Abs(-1), 1) {
 //             return
 //         }
 //         ...

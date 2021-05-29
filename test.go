@@ -38,9 +38,9 @@ func displayDumpDiff(v interface{}) bool {
 	return true
 }
 
-// Eq compares got to want and reports an error to tb if they are not equal.
+// Equal compares got to want and reports an error to tb if they are not equal.
 // Returns true if equal.
-func Eq(tb testing.TB, got, want interface{}) bool {
+func Equal(tb testing.TB, got, want interface{}) bool {
 	tb.Helper()
 
 	eq := cmp.Equal(got, want)
@@ -89,17 +89,17 @@ func Eq(tb testing.TB, got, want interface{}) bool {
 	return eq
 }
 
-// NotEq compares got to want and reports an error to tb if they are equal.
+// NotEqual compares got to want and reports an error to tb if they are equal.
 // Returns true if not equal.
-func NotEq(tb testing.TB, got, notWant interface{}) bool {
+func NotEqual(tb testing.TB, got, notWant interface{}) bool {
 	tb.Helper()
-	notEq := !cmp.Equal(got, notWant)
-	if notEq {
+	notEqual := !cmp.Equal(got, notWant)
+	if notEqual {
 		tb.Logf("%s: got %+v, not %+v", caller(), got, notWant)
 	} else {
 		tb.Errorf("%s: got %+v, want not %+v", caller(), got, notWant)
 	}
-	return notEq
+	return notEqual
 }
 
 func caller() string {
